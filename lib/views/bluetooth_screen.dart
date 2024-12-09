@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class BluetoothScanWidget extends StatefulWidget {
   const BluetoothScanWidget({Key? key}) : super(key: key);
@@ -10,43 +10,40 @@ class BluetoothScanWidget extends StatefulWidget {
 }
 
 class _BluetoothScanWidgetState extends State<BluetoothScanWidget> {
-  final flutterReactiveBle = FlutterReactiveBle();
-  late StreamSubscription<DiscoveredDevice> _scanStream;
-  List<DiscoveredDevice> devices = [];
+  final FlutterBluePlus flutterBlue = FlutterBluePlus();
+  late StreamSubscription<List<ScanResult>> _scanStream;
+  List<ScanResult> devices = [];
   bool isScanning = false;
   bool isConnected = false;
   bool supportsBle = false;
   bool reconnect = false;
-  late StreamSubscription<ConnectionStateUpdate> _connectionStream;
+  BluetoothDevice? connectedDevice;
+
   final TextEditingController _emailController = TextEditingController();
   bool isEmailValid = true;
 
   @override
   void initState() {
     super.initState();
+    // Check BLE support and availability
+    checkBLEAvailability();
+  }
 
-    // Check BLE support and status
-    flutterReactiveBle.statusStream.listen((status) {
-      if (status == BleStatus.ready) {
-        setState(() {
-          supportsBle = true;
-        });
-        print("BLE is ready!");
-      } else if (status == BleStatus.unauthorized) {
-        setState(() {
-          supportsBle = false;
-        });
-        print("BLE is not supported or permissions are missing.");
-      } else {
-        print("BLE status: $status");
-      }
+  // Check if BLE is available on the device
+  Future<void> checkBLEAvailability() async {
+    bool isAvailable = await FlutterBluePlus.isAvailable;
+    setState(() {
+      supportsBle = isAvailable;
     });
+    print("BLE Available: $isAvailable");
   }
 
   @override
   void dispose() {
-    _scanStream.cancel();
-    _connectionStream.cancel();
+    // Cancel the scan subscription if active
+    if (_scanStream != null) {
+      _scanStream.cancel();
+    }
     super.dispose();
   }
 
@@ -57,41 +54,53 @@ class _BluetoothScanWidgetState extends State<BluetoothScanWidget> {
       isScanning = true;
     });
 
-    _scanStream = flutterReactiveBle.scanForDevices(withServices: []).listen(
-      (device) {
-        setState(() {
-          if (!devices.any((d) => d.id == device.id)) {
-            devices.add(device);
-          }
-        });
-      },
-      onError: (error) {
-        setState(() => isScanning = false);
-      },
-    );
-  }
+    // Start scanning and subscribe to scan results
+    FlutterBluePlus.startScan(timeout: Duration(seconds: 4));
 
-  void stopScan() {
-    _scanStream.cancel();
-    setState(() => isScanning = false);
-  }
-
-  void connectToDevice(DiscoveredDevice device) {
-    _connectionStream = flutterReactiveBle
-        .connectToDevice(id: device.id)
-        .listen((connectionState) {
+    _scanStream = FlutterBluePlus.scanResults.listen((results) {
       setState(() {
-        isConnected =
-            connectionState.connectionState == DeviceConnectionState.connected;
+        // Update the devices list with the latest scan results
+        devices = results;
       });
-    }, onError: (error) {
-      setState(() => isConnected = false);
     });
   }
 
+  void stopScan() {
+    // Stop the scan and cancel the subscription
+    FlutterBluePlus.stopScan();
+    _scanStream.cancel();
+    setState(() {
+      isScanning = false;
+    });
+  }
+
+  void connectToDevice(BluetoothDevice device) async {
+    await device.connect();
+    setState(() {
+      isConnected = true;
+      connectedDevice = device;
+    });
+    // Discover services once connected
+    discoverServices(device);
+  }
+
+  void discoverServices(BluetoothDevice device) async {
+    var services = await device.discoverServices();
+    for (var service in services) {
+      for (var characteristic in service.characteristics) {
+        if (characteristic.properties.read) {
+          // This is where you can interact with the characteristics
+        }
+      }
+    }
+  }
+
   void disconnectFromDevice() {
-    _connectionStream.cancel();
-    setState(() => isConnected = false);
+    connectedDevice?.disconnect();
+    setState(() {
+      isConnected = false;
+      connectedDevice = null;
+    });
   }
 
   // Function to validate the email
@@ -169,14 +178,6 @@ class _BluetoothScanWidgetState extends State<BluetoothScanWidget> {
             Navigator.pop(context);
           },
         ),
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.search, color: Colors.white),
-        //     onPressed: () {
-        //       // Add search functionality if needed
-        //     },
-        //   ),
-        // ],
       ),
       body: Column(
         children: [
@@ -262,12 +263,12 @@ class _BluetoothScanWidgetState extends State<BluetoothScanWidget> {
                 : ListView.builder(
                     itemCount: devices.length,
                     itemBuilder: (context, index) {
-                      final device = devices[index];
+                      final device = devices[index].device;
                       return ListTile(
                         title: Text(
                           device.name.isEmpty ? "Unknown Device" : device.name,
                         ),
-                        subtitle: Text(device.id),
+                        subtitle: Text(device.id.id),
                         trailing: ElevatedButton(
                           onPressed: () => connectToDevice(device),
                           child: const Text("Connect"),

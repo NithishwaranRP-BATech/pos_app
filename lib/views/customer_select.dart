@@ -21,7 +21,6 @@ class CustomerSelect extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Removed the search bar
           Expanded(
             child: ListView.builder(
               itemCount: customers.length,
@@ -40,14 +39,7 @@ class CustomerSelect extends StatelessWidget {
                       subtitle: const Text('LUANDA'),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () {
-                        // Navigating to the CustomerPage when a list item is tapped
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CustomerPage(), // Opening the same page (for demonstration)
-                          ),
-                        );
+                        Navigator.of(context).push(_createRoute());
                       },
                     ),
                     const Divider(), // Divider between each customer
@@ -58,6 +50,26 @@ class CustomerSelect extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  // Custom Route for CustomerPage
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const CustomerPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0); // Starts from the bottom
+        const end = Offset.zero; // Ends at the top
+        const curve = Curves.easeInOut; // Customizable curve
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 800), // Slower transition
     );
   }
 }

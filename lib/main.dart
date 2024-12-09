@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pos_app/views/custom_bottom_nav_bar.dart';
@@ -19,15 +20,51 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(375, 812), // Default design size for responsiveness
+      designSize:
+          const Size(375, 812), // Default design size for responsiveness
       builder: (context, child) {
         return MaterialApp(
           title: 'Digital Data',
           theme: ThemeData(primarySwatch: Colors.blue),
-          home: const LoginPage(), // Set LoginPage as the first screen
+          home: const SplashScreen(), // Set SplashScreen as the first screen
           debugShowCheckedModeBanner: false,
         );
       },
+    );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Wait for 5 seconds, then navigate to the LoginPage
+    Timer(const Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SizedBox(
+        width: double.infinity, // Full screen width
+        height: double.infinity, // Full screen height
+        child: Image.asset(
+          'assets/png/pos_flash.png', // Path to your image
+          fit: BoxFit.cover, // Makes the image cover the entire screen
+        ),
+      ),
     );
   }
 }
@@ -42,15 +79,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  // Only HomePage, CustomerPage, and ProfilePage are part of the navbar
   static const List<Widget> _pages = [
     HomePage(),
-    RecentOrdersPage(),
     CustomerSelect(),
     ProfilePage(),
   ];
 
-  // Function to handle bottom navigation bar selection
   void _onTabSelected(int index) {
     setState(() {
       _selectedIndex = index;
@@ -60,7 +94,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex], // Render only the selected page from the navbar
+      body: _pages[
+          _selectedIndex], // Render only the selected page from the navbar
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _selectedIndex,
         onTabSelected: _onTabSelected,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pos_app/views/customer_statement.dart';
 import 'package:pos_app/views/item_details_page.dart';
 import 'package:pos_app/views/report_screen.dart';
 
@@ -11,8 +12,108 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool _isToggled = false;
+  late AnimationController _controller1;
+  late Animation<Offset> _slideAnimation1;
+  late AnimationController _controller2;
+  late Animation<Offset> _slideAnimation2;
+  late AnimationController _controller3;
+  late Animation<Offset> _slideAnimation3;
+  late AnimationController _controller4;
+  late Animation<Offset> _slideAnimation4;
+  late AnimationController _controller5;
+  late Animation<Offset> _slideAnimation5;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize the controllers
+    _controller1 = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    _controller2 = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    _controller3 = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    _controller4 = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    _controller5 = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+
+    // Initialize the animations
+    _slideAnimation1 = Tween<Offset>(
+      begin: const Offset(-1, 0), // Start from left
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller1,
+      curve: Curves.easeInOut,
+    ));
+
+    _slideAnimation2 = Tween<Offset>(
+      begin: const Offset(1, 0), // Start from right
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller2,
+      curve: Curves.easeInOut,
+    ));
+
+    _slideAnimation3 = Tween<Offset>(
+      begin: const Offset(-1, 0), // Start from left
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller3,
+      curve: Curves.easeInOut,
+    ));
+
+    _slideAnimation4 = Tween<Offset>(
+      begin: const Offset(1, 0), // Start from right
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller4,
+      curve: Curves.easeInOut,
+    ));
+    _slideAnimation5 = Tween<Offset>(
+      begin: const Offset(0, 1), // Start from bottom
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller5,
+      curve: Curves.easeInOut,
+    ));
+
+    // Start the animations
+    _controller1.forward();
+    Future.delayed(const Duration(milliseconds: 200), () {
+      _controller2.forward();
+    });
+    Future.delayed(const Duration(milliseconds: 400), () {
+      _controller3.forward();
+    });
+    Future.delayed(const Duration(milliseconds: 600), () {
+      _controller4.forward();
+    });
+    _controller5.forward();
+  }
+
+  @override
+  void dispose() {
+    // Dispose the controllers when done
+    _controller1.dispose();
+    _controller2.dispose();
+    _controller3.dispose();
+    _controller4.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                   });
                 },
                 activeTrackColor: const Color(0xFFD4FFEE), // Track color
-                activeColor: const Color(0xFF435F08), // Thumb color
+                activeColor: Colors.green, // Thumb color
                 inactiveThumbColor:
                     Colors.grey, // Inactive thumb color (disabled grey)
                 inactiveTrackColor:
@@ -70,24 +171,30 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: _OverviewCard(
-                    title: 'Today',
-                    value: '10289',
-                    percentage: '+2.5%',
-                    isIncrease: true,
-                    icon: Icons.arrow_upward,
-                    suffixText: 'Compared to \n(21340 last year)',
+                  child: SlideTransition(
+                    position: _slideAnimation1,
+                    child: _OverviewCard(
+                      title: 'Today',
+                      value: '10289',
+                      percentage: '+2.5%',
+                      isIncrease: true,
+                      icon: Icons.arrow_upward,
+                      suffixText: 'Compared to \n(21340 last year)',
+                    ),
                   ),
                 ),
                 SizedBox(width: 10),
                 Expanded(
-                  child: _OverviewCard(
-                    title: 'Total Profit',
-                    value: '20921',
-                    percentage: '+0.5%',
-                    isIncrease: true,
-                    icon: Icons.arrow_upward,
-                    suffixText: 'Compared to \n(19000 last year)',
+                  child: SlideTransition(
+                    position: _slideAnimation2,
+                    child: _OverviewCard(
+                      title: 'Total Profit',
+                      value: '20921',
+                      percentage: '+0.5%',
+                      isIncrease: true,
+                      icon: Icons.arrow_upward,
+                      suffixText: 'Compared to \n(19000 last year)',
+                    ),
                   ),
                 ),
               ],
@@ -97,118 +204,119 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: _OverviewCard(
-                    title: 'Sales Invoice',
-                    value: '149',
-                    percentage: '-1.5%',
-                    isIncrease: false,
-                    icon: Icons.arrow_downward,
-                    suffixText: 'Compared to \n(165 last year)',
+                  child: SlideTransition(
+                    position: _slideAnimation3,
+                    child: _OverviewCard(
+                      title: 'Sales Invoice',
+                      value: '149',
+                      percentage: '-1.5%',
+                      isIncrease: false,
+                      icon: Icons.arrow_downward,
+                      suffixText: 'Compared to \n(165 last year)',
+                    ),
                   ),
                 ),
                 SizedBox(width: 10),
                 Expanded(
-                  child: _OverviewCard(
-                    title: 'Sales',
-                    value: '17390',
-                    percentage: '+2.5%',
-                    isIncrease: true,
-                    icon: Icons.arrow_upward,
-                    suffixText: 'Compared to \n(10500 last year)',
+                  child: SlideTransition(
+                    position: _slideAnimation4,
+                    child: _OverviewCard(
+                      title: 'Sales',
+                      value: '17390',
+                      percentage: '+2.5%',
+                      isIncrease: true,
+                      icon: Icons.arrow_upward,
+                      suffixText: 'Compared to \n(10500 last year)',
+                    ),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.all(20.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 1,
-                    blurRadius: 6,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+            SlideTransition(
+              position: _slideAnimation5,
+              child: Container(
+                padding: const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 1,
+                      blurRadius: 6,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Sales Report',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        _ColorDot(
+                          color: Colors.green,
+                          label: 'Online Sales',
+                        ),
+                        const SizedBox(width: 16),
+                        _ColorDot(
+                          color: Colors.blue,
+                          label: 'Offline Sales',
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: 200.h, // Ensure a fixed height for the chart
+                      child: _SalesReportChart(),
+                    ),
+                  ],
+                ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Sales Report',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      _ColorDot(
-                        color: Colors.green,
-                        label: 'Online Sales',
-                      ),
-                      const SizedBox(width: 16),
-                      _ColorDot(
-                        color: Colors.blue,
-                        label: 'Offline Sales',
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    height: 200.h, // Ensure a fixed height for the chart
-                    child: _SalesReportChart(),
-                  ),
-                ],
-              ),
+              // const SizedBox(height: 20),
             ),
             const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CustomerStatementPage()),
+                    );
+                  },
+                  child: _InfoCard(
+                    icon: Icons.people, // Replace with your icon
+                    title: 'Customers',
+                    subtitle: 'Hit Rate this year',
+                  ),
+                ),
+                SizedBox(width: 10),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ReportPage()),
+                    );
+                  },
+                  child: _InfoCard(
+                    icon: Icons.bar_chart, // Replace with your icon
+                    title: 'Reports',
+                    subtitle: 'Hit Rate this year',
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
-      ),
-      floatingActionButton: Stack(
-        children: [
-          // "Add" button
-          Positioned(
-            bottom: 80.h, // Positioned slightly above the report button
-            right: 16.w,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(30), // Adjust the radius here
-              child: FloatingActionButton(
-                onPressed: () {
-                  // Navigate to the ItemDetailsPage when "Add" is pressed
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ItemDetailsPage()),
-                  );
-                },
-                backgroundColor: Colors.blue,
-                child: const Icon(Icons.add),
-              ),
-            ),
-          ),
-          // "Report" button
-          Positioned(
-            bottom: 16.h,
-            right: 16.w,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(30), // Adjust the radius here
-              child: FloatingActionButton(
-                onPressed: () {
-                  // Navigate to the Report Page when the report icon is clicked
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ReportPage()),
-                  );
-                },
-                backgroundColor: Colors.green,
-                child: const Icon(Icons.report),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -364,6 +472,65 @@ class _OverviewCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _InfoCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  const _InfoCard({
+    Key? key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 6,
+              offset: Offset(0, 3), // Shadow position
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 30, color: Colors.blue), // Adjust icon and color
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

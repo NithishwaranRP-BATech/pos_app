@@ -6,9 +6,6 @@ class ProfileDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize ScreenUtil
-    // ScreenUtil.init(context, designSize: Size(360, 690), minTextAdapt: true);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -23,27 +20,47 @@ class ProfileDetailsPage extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.black),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: 20.w), // Using .w for horizontal padding
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h), // .h for vertical spacing
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 20.h), // Spacing at the top
 
-            const TextFieldLabel(text: 'User Name'),
-            const CustomTextField(),
-            SizedBox(height: 20.h),
+                    // User Details Form
+                    const TextFieldLabel(text: 'User Name'),
+                    const CustomTextField(),
+                    SizedBox(height: 20.h),
 
-            const TextFieldLabel(text: 'Email Id'),
-            const CustomTextField(),
-            SizedBox(height: 20.h),
+                    const TextFieldLabel(text: 'Series'),
+                    const CustomTextField(),
+                    SizedBox(height: 20.h),
 
-            const TextFieldLabel(text: 'Phone Number'),
-            const CustomTextField(),
-            const Spacer(),
+                    const TextFieldLabel(text: 'Ware House'),
+                    const CustomTextField(),
+                    SizedBox(height: 20.h),
 
-            SizedBox(
+                    const TextFieldLabel(text: 'Client'),
+                    const CustomTextField(),
+                    SizedBox(height: 20.h),
+
+                    const TextFieldLabel(text: 'Language'),
+                    const CustomTextField(),
+                    SizedBox(height: 20.h),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // Save Details Button
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+            child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
@@ -51,26 +68,23 @@ class ProfileDetailsPage extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(
-                      vertical: 16.h), // .h for vertical padding
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(30.w), // .w for border radius
+                    borderRadius: BorderRadius.circular(30.w),
                   ),
                 ),
                 child: Text(
                   'Save Details',
                   style: TextStyle(
-                    fontSize: 16.sp, // .sp for font size
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 20.h),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -86,7 +100,7 @@ class TextFieldLabel extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        fontSize: 16.sp, // Using .sp for font size
+        fontSize: 16.sp,
         fontWeight: FontWeight.bold,
         color: Colors.black87,
       ),
@@ -101,16 +115,15 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(
-            horizontal: 12.w, vertical: 12.h), // .w and .h for padding
+        contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
               color: Color.fromARGB(255, 15, 15, 15), width: 1),
-          borderRadius: BorderRadius.circular(8.w), // .w for border radius
+          borderRadius: BorderRadius.circular(8.w),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.blue, width: 2),
-          borderRadius: BorderRadius.circular(8.w), // .w for border radius
+          borderRadius: BorderRadius.circular(8.w),
         ),
       ),
     );

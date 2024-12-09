@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pos_app/views/bluetooth_screen.dart';
+import 'package:pos_app/views/your_product_list.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
@@ -140,7 +141,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   ),
                   fillColor: Color.fromARGB(255, 255, 255, 255),
                   filled: true,
-                  // borderRadius: BorderRadius.circular(8),
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                 ),
@@ -303,7 +303,22 @@ class _ProductListScreenState extends State<ProductListScreen> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => BluetoothScanWidget()),
+            MaterialPageRoute(
+              builder: (context) => CartScreen(
+                cartItems: [
+                  CartItem(
+                      title: "Tenzin 1",
+                      unitPrice: 250.0,
+                      quantity: 2,
+                      imageUrl: 'assets/png/apple.png'),
+                  CartItem(
+                      title: "Tenzin 2",
+                      unitPrice: 150.0,
+                      quantity: 1,
+                      imageUrl: 'assets/png/apple.png'),
+                ],
+              ),
+            ),
           );
         },
         child: Container(
@@ -336,7 +351,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 ),
               ),
               const Text(
-                'Go to Print',
+                'Go to Cart',
                 style:
                     TextStyle(fontSize: 18, color: Color.fromRGBO(0, 0, 0, 1)),
               ),
