@@ -32,8 +32,8 @@ class CustomerPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: Image.asset(
-              'assets/png/add_person.png', // Make sure the image path is correct
-              width: 24, // You can adjust the width and height
+              'assets/png/add_person.png',
+              width: 24,
               height: 24,
             ),
             onPressed: () {
@@ -49,101 +49,105 @@ class CustomerPage extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Enter Name',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        TextField(
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 8.0, // Reduces height
-                              horizontal: 10.0,
+                    content: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Enter Name',
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 15),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Enter NIF Number',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        TextField(
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 8.0,
-                              horizontal: 10.0,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Enter Mobile Number',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        TextField(
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 8.0,
-                              horizontal: 10.0,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Enter Location',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        TextField(
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 8.0,
-                              horizontal: 10.0,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    actions: [
-                      Center(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width *
-                              0.8, // 80% of screen width
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // Add your form submission logic here
-                              Navigator.pop(context); // Close the dialog
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
+                          const SizedBox(height: 5),
+                          TextField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 10.0,
                               ),
                             ),
-                            child: const Text(
-                              'Submit',
-                              style: TextStyle(color: Colors.white),
+                          ),
+                          const SizedBox(height: 15),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Enter NIF Number',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          TextField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 10.0,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Enter Mobile Number',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          TextField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 10.0,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Enter Location',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          TextField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 10.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Center(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Add your form submission logic here
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
+                              child: const Text(
+                                'Submit',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           ),
                         ),
@@ -182,8 +186,7 @@ class CustomerPage extends StatelessWidget {
                     ListTile(
                       leading: const CircleAvatar(
                         backgroundColor: Colors.blue,
-                        child: Icon(Icons.person,
-                            color: Colors.white), // Placeholder avatar
+                        child: Icon(Icons.person, color: Colors.white),
                       ),
                       title: Text(
                         customers[index],
@@ -200,7 +203,7 @@ class CustomerPage extends StatelessWidget {
                         );
                       },
                     ),
-                    const Divider(), // Divider between each customer
+                    const Divider(),
                   ],
                 );
               },

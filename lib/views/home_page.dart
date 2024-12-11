@@ -107,60 +107,59 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    // Dispose the controllers when done
     _controller1.dispose();
     _controller2.dispose();
     _controller3.dispose();
     _controller4.dispose();
-    super.dispose();
+    _controller5.dispose();
+    super.dispose(); // Call super.dispose()
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false, // Remove back icon
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Hi Clarence',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const Text(
-              'Check your overview details',
-              style: TextStyle(fontSize: 16),
+        appBar: AppBar(
+          automaticallyImplyLeading: false, // Remove back icon
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Hi Clarence',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const Text(
+                'Check your overview details',
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+          actions: [
+            Row(
+              children: [
+                Switch(
+                  value: _isToggled,
+                  onChanged: (value) {
+                    setState(() {
+                      _isToggled = value;
+                    });
+                  },
+                  activeTrackColor: const Color(0xFFD4FFEE), // Track color
+                  activeColor: Colors.green, // Thumb color
+                  inactiveThumbColor:
+                      Colors.grey, // Inactive thumb color (disabled grey)
+                  inactiveTrackColor:
+                      Colors.grey.shade400, // Inactive track color
+                ),
+                const SizedBox(width: 10), // Space between text and avatar
+              ],
             ),
           ],
         ),
-        actions: [
-          Row(
-            children: [
-              Switch(
-                value: _isToggled,
-                onChanged: (value) {
-                  setState(() {
-                    _isToggled = value;
-                  });
-                },
-                activeTrackColor: const Color(0xFFD4FFEE), // Track color
-                activeColor: Colors.green, // Thumb color
-                inactiveThumbColor:
-                    Colors.grey, // Inactive thumb color (disabled grey)
-                inactiveTrackColor:
-                    Colors.grey.shade400, // Inactive track color
-              ),
-              const SizedBox(width: 10), // Space between text and avatar
-            ],
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        // Add this for scroll functionality
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        body: SingleChildScrollView(
+          // Add this for scroll functionality
+          padding: const EdgeInsets.all(20.0),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const SizedBox(height: 20),
             const Text(
               'Dashboard Overview',
@@ -258,13 +257,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 20),
-                    Row(
+                    const Row(
                       children: [
                         _ColorDot(
                           color: Colors.green,
                           label: 'Online Sales',
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                         _ColorDot(
                           color: Colors.blue,
                           label: 'Offline Sales',
@@ -274,7 +273,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     const SizedBox(height: 16),
                     SizedBox(
                       height: 200.h, // Ensure a fixed height for the chart
-                      child: _SalesReportChart(),
+                      child: const _SalesReportChart(),
                     ),
                   ],
                 ),
@@ -282,43 +281,50 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               // const SizedBox(height: 20),
             ),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CustomerStatementPage()),
-                    );
-                  },
-                  child: _InfoCard(
-                    icon: Icons.people, // Replace with your icon
-                    title: 'Customers',
-                    subtitle: 'Hit Rate this year',
-                  ),
-                ),
-                SizedBox(width: 10),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ReportPage()),
-                    );
-                  },
-                  child: _InfoCard(
-                    icon: Icons.bar_chart, // Replace with your icon
-                    title: 'Reports',
-                    subtitle: 'Hit Rate this year',
-                  ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        // Show the Customer Statement page when clicked
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const CustomerStatementPage()),
+                        );
+                      },
+                      child: const _InfoCard(
+                        icon: Icons.people,
+                        title: 'Customers',
+                        subtitle: 'Hit Rate this year',
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {
+                        // Show the Report page when clicked
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ReportPage()),
+                        );
+                      },
+                      child: const _InfoCard(
+                        icon: Icons.bar_chart,
+                        title: 'Reports',
+                        subtitle: 'Hit Rate this year',
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
+          ]),
+        ));
   }
 }
 
@@ -491,46 +497,45 @@ class _InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              blurRadius: 6,
-              offset: Offset(0, 3), // Shadow position
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 30, color: Colors.blue), // Adjust icon and color
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+    return Container(
+      width: 160, // Set a fixed width for the card
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 6,
+            offset: Offset(0, 3), // Shadow position
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 30, color: Colors.blue),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey.shade600,
-                  ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: Colors.grey.shade600,
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
